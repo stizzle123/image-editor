@@ -1,6 +1,6 @@
 import "./App.css";
 import "tui-image-editor/dist/tui-image-editor.css";
-import React from "react";
+import React, { useEffect } from "react";
 import ImageEditor from "@toast-ui/react-image-editor";
 const icona = require("tui-image-editor/dist/svg/icon-a.svg");
 const iconb = require("tui-image-editor/dist/svg/icon-b.svg");
@@ -13,6 +13,7 @@ const myTheme = {
   "common.backgroundColor": "#151515",
   "downloadButton.backgroundColor": "white",
   "downloadButton.borderColor": "white",
+  "downloadButton.display": "none",
   "downloadButton.color": "black",
   "menu.normalIcon.path": icond,
   "menu.activeIcon.path": iconb,
@@ -22,6 +23,11 @@ const myTheme = {
 
 function App() {
   const imageEditor = React.createRef();
+
+  useEffect(() => {
+    document.querySelector(".tui-image-editor-header-logo").style.display =
+      "none";
+  }, []);
 
   const saveImageToDisk = () => {
     // const imageEditorInst = imageEditor.current.imageEditorInst;
@@ -35,6 +41,25 @@ function App() {
   };
   return (
     <>
+      <div style={{ textAlign: "center", margin: 50 }}>
+        <button
+          onClick={saveImageToDisk}
+          style={{
+            outline: "none",
+            border: "none",
+            padding: 20,
+            backgroundColor: "#2196f3",
+            color: "#fff",
+            width: 200,
+            borderRadius: 50,
+            textTransform: "uppercase",
+            cursor: "pointer",
+            fontSize: "1rem"
+          }}
+        >
+          Save to disk <i className="fas fa-download" />
+        </button>
+      </div>
       <ImageEditor
         includeUI={{
           loadImage: {
@@ -43,12 +68,14 @@ function App() {
           },
           theme: myTheme,
           menu: ["crop", "flip", "rotate", "draw", "shape", "text", "filter"],
+
           initMenu: "filter",
           uiSize: {
             width: "100%",
             height: `calc(100vh + 160px)`
           },
-          menuBarPosition: "bottom"
+          menuBarPosition: "bottom",
+          menuBarTop: "none"
         }}
         cssMaxHeight={window.innerHeight}
         cssMaxWidth={window.innerWidth}
@@ -56,11 +83,9 @@ function App() {
           cornerSize: 20,
           rotatingPointOffset: 70
         }}
-        onClick={saveImageToDisk}
         usageStatistics={true}
         ref={imageEditor}
       />
-      {/* <button onClick={saveImageToDisk}>Save</button> */}
     </>
   );
 }
